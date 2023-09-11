@@ -44,14 +44,14 @@ func readbyWord(file string) []string {
 func main() {
 
 	// using the function
-	dir, err := os.Getwd()
+	_, err := os.Getwd()
 	if err != nil {
 		fmt.Println(err)
 	}
 
 	currentTime := time.Now()
 
-	recipients := readbyWord(dir + "/recipients_list.txt")
+	recipients := readbyWord("target_list.txt")
 
 	t := template.New("template.html")
 
