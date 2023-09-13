@@ -1,3 +1,6 @@
 sendgrid.env
 /dist
-target_list.txt
+*.txt
+*.exe
+*.env
+build/*.html
