@@ -98,6 +98,7 @@ func main() {
 		}
 	}
 	fmt.Printf("\nRecieved by:\n%v \n\n", addresses)
+	fmt.Printf("\n env is:\n%v \n\n", os.Getenv("SENDGRID_API_KEY"))
 
 	input := bufio.NewScanner(os.Stdin)
 	input.Scan()
