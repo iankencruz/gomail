@@ -9,6 +9,7 @@ import (
 	"os"
 	"time"
 
+	"github.com/joho/godotenv"
 	"github.com/sendgrid/sendgrid-go"
 	"github.com/sendgrid/sendgrid-go/helpers/mail"
 )
@@ -18,7 +19,6 @@ func readbyWord(file string) []string {
 	var result []string
 
 	f, err := os.Open(file)
-
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -47,6 +47,11 @@ func main() {
 	_, err := os.Getwd()
 	if err != nil {
 		fmt.Println(err)
+	}
+
+	err = godotenv.Load("sendgrid.env")
+	if err != nil {
+		log.Fatal("Error loading .env file")
 	}
 
 	currentTime := time.Now()
@@ -78,7 +83,6 @@ func main() {
 	from := mail.NewEmail("Paysorted Admin", "noreply@ynotsoft.com")
 	subject := "Paysorted Feedback"
 
-	// to := mail.NewEmail("ian.cruz@ynotconsulting.com.au", "ian.cruz@ynotconsulting.com.au")
 	plainTextContent := "and easy to do anywhere, even with Go"
 	for i, recipient := range recipients {
 
@@ -98,7 +102,6 @@ func main() {
 		}
 	}
 	fmt.Printf("\nRecieved by:\n%v \n\n", addresses)
-	fmt.Printf("\n env is:\n%v \n\n", os.Getenv("SENDGRID_API_KEY"))
 
 	input := bufio.NewScanner(os.Stdin)
 	input.Scan()
