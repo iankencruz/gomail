@@ -80,7 +80,7 @@ func main() {
 
 	// sendgrid functions
 
-	from := mail.NewEmail("Paysorted Admin", "noreply@ynotsoft.com")
+	from := mail.NewEmail("Paysorted Admin Team", "noreply@ynotsoft.com")
 	subject := "Paysorted Feedback"
 
 	plainTextContent := "and easy to do anywhere, even with Go"
