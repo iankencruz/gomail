@@ -1,4 +1,4 @@
-module iankendoit/gomail
+module github.com/iankencruz/gomail
 
 go 1.21.0
 
