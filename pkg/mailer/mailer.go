@@ -1,4 +1,4 @@
-package gomail
+package mailer
 
 import (
 	"bufio"
@@ -6,6 +6,9 @@ import (
 	"os"
 )
 
+var Info = "This is package mailer"
+
+// Comment added
 func ReadNewFile(file string) []string {
 
 	var result []string
