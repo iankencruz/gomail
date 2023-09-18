@@ -8,16 +8,16 @@ import (
 )
 
 type Contact struct {
-	Firstname []string
-	Lastname  []string
-	Email     []string
-	Phone     []int
+	Firstname string
+	Lastname  string
+	Email     string
+	Phone     int
 }
 
 // Returns a contact struct
-func ReadExcelFile(input string) Contact {
+func ReadExcelFile(input string) []Contact {
 
-	var contacts Contact
+	var contacts []Contact
 
 	// store values
 	var fname []string
