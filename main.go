@@ -7,6 +7,7 @@ import (
 	xc "github.com/iankencruz/gomail/pkg/goexcel"
 	"github.com/iankencruz/gomail/pkg/mailer"
 	"github.com/joho/godotenv"
+	"github.com/sendgrid/sendgrid-go/helpers/mail"
 )
 
 func main() {
@@ -33,8 +34,8 @@ func main() {
 	htmlContent := mailer.PrepareTemplates("template.html", data)
 
 	contacts := xc.ReadExcelFile("sample.xlsx")
-
-	mailer.SendMail(contacts, "subject", "Plain", htmlContent)
+	from := mail.NewEmail("Paysorted Admin Team", "noreply@ynotsoft.com")
+	mailer.SendMail(from, contacts, "subject", "Plain", htmlContent)
 
 	// // Read through recipients in external file
 
