@@ -1,5 +1,7 @@
 sendgrid.env
+.env
 /dist
 target_list.txt
 /bin
-
+/configs/uploads/
+.xlsx

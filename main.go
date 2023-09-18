@@ -1,37 +1,40 @@
 package main
 
 import (
-	"fmt"
 	"log"
-	"os"
+	"time"
 
 	xc "github.com/iankencruz/gomail/pkg/goexcel"
+	"github.com/iankencruz/gomail/pkg/mailer"
 	"github.com/joho/godotenv"
 )
 
 func main() {
 
-	// using the function
-	_, err := os.Getwd()
-	if err != nil {
-		fmt.Println(err)
-	}
-
-	err = godotenv.Load("sendgrid.env")
+	err := godotenv.Load("sendgrid.env")
 	if err != nil {
 		log.Fatal("Error loading .env file")
 	}
+
+	// routes.InitializeRoutes()
 
 	// currentTime := time.Now()
 
 	// // rec := area.ReadNewFile("sdadwa"
 
-	// i1 := excelops.Contact{Fname: "ian", Lname: "cruz", Email: "ian@", Phone: "02"}
+	data := struct {
+		//TODO  Read date input and format to template
+		DateTime string
+	}{
+		DateTime: time.Now().Format("02/01/2006"),
+	}
 
-	recipients := xc.ReadExcelFile("sample.xlsx")
-	// fmt.Println(i1)
-	fmt.Println(recipients.Firstname)
-	fmt.Println(recipients.Phone)
+	//*** Read Data from an excel file
+	htmlContent := mailer.PrepareTemplates("template.html", data)
+
+	contacts := xc.ReadExcelFile("sample.xlsx")
+
+	mailer.SendMail(contacts, "subject", "Plain", htmlContent)
 
 	// t := template.New("template.html")
 
@@ -41,7 +44,7 @@ func main() {
 	// }
 
 	// // Read through recipients in external file
-	// addresses := make([]mail.Email, len(recipients))
+	// addresses := make([]mail.Email, len(recipients.Email))
 
 	// var body bytes.Buffer
 
