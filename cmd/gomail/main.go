@@ -9,37 +9,12 @@ import (
 	"os"
 	"time"
 
+	"github.com/iankencruz/gomail/mailer"
+
 	"github.com/joho/godotenv"
 	"github.com/sendgrid/sendgrid-go"
 	"github.com/sendgrid/sendgrid-go/helpers/mail"
 )
-
-func readbyWord(file string) []string {
-
-	var result []string
-
-	f, err := os.Open(file)
-	if err != nil {
-		fmt.Println(err)
-	}
-
-	defer f.Close()
-
-	scanner := bufio.NewScanner(f)
-	scanner.Split(bufio.ScanWords)
-
-	for scanner.Scan() {
-
-		result = append(result, scanner.Text())
-	}
-
-	if err := scanner.Err(); err != nil {
-		fmt.Println(err)
-	}
-
-	return result
-
-}
 
 func main() {
 
@@ -56,7 +31,7 @@ func main() {
 
 	currentTime := time.Now()
 
-	recipients := readbyWord("target_list.txt")
+	recipients := mailer.ReadNewFile("target_list.txt")
 
 	t := template.New("template.html")
 
