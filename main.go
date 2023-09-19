@@ -2,12 +2,9 @@ package main
 
 import (
 	"log"
-	"time"
 
-	xc "github.com/iankencruz/gomail/pkg/goexcel"
-	"github.com/iankencruz/gomail/pkg/mailer"
+	"github.com/iankencruz/gomail/pkg/routes"
 	"github.com/joho/godotenv"
-	"github.com/sendgrid/sendgrid-go/helpers/mail"
 )
 
 func main() {
@@ -17,34 +14,8 @@ func main() {
 		log.Fatal("Error loading .env file")
 	}
 
-	// routes.InitializeRoutes()
+	routes.InitializeRoutes()
 
 	// currentTime := time.Now()
-
-	// // rec := area.ReadNewFile("sdadwa"
-
-	data := struct {
-		//TODO  Read date input and format to template
-		DateTime string
-	}{
-		DateTime: time.Now().Format("02/01/2006"),
-	}
-
-	//*** Read Data from an excel file
-	htmlContent := mailer.PrepareTemplates("template.html", data)
-
-	contacts := xc.ReadExcelFile("sample.xlsx")
-	from := mail.NewEmail("Paysorted Admin Team", "noreply@ynotsoft.com")
-	mailer.SendMail(from, contacts, "subject", "Plain", htmlContent)
-
-	// // Read through recipients in external file
-
-	// var body bytes.Buffer
-
-	// t.Execute(&body, struct {
-	// 	DateTime string
-	// }{
-	// 	DateTime: currentTime.Format("02/01/2006"),
-	// })
 
 }

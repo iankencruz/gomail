@@ -43,15 +43,21 @@ func ReadNewFile(file string) []string {
 
 }
 
-func PrepareTemplates(file string, dt any) string {
-	t := template.New("./configs/templates/" + file)
+func PrepareTemplates(file string, contacts []goexcel.Contact) string {
+	t := template.New(file) // Try without dir path
 
-	t, err := t.ParseFiles("./configs/templates/" + file)
+	t, err := t.ParseFiles("./configs/templates/" + file) // Try without dir path
 	if err != nil {
 		log.Println(err)
 	}
 
 	var body bytes.Buffer
+
+	// data := struct {
+	// 	Name string
+	// }{
+	// 	Name: ,
+	// }
 
 	// struct {
 	// 	DateTime string
@@ -61,15 +67,18 @@ func PrepareTemplates(file string, dt any) string {
 	//  values...
 	// })
 
-	t.Execute(&body, dt)
+	if err := t.Execute(&body, contacts); err != nil {
+		fmt.Printf("Error: func t.Execute: %v", err)
+	}
 
 	htmlBody := body.String()
-	fmt.Println(htmlBody)
+
+	// fmt.Printf("HTML Body: %v", htmlBody)
 
 	return htmlBody
 }
 
-func SendMail(fromSender *mail.Email, toTargets []goexcel.Contact, subject string, plainText string, html string) {
+func SendMail(fromSender *mail.Email, toTargets []goexcel.Contact, subject string, plainText string, html string, sendgridKey string) {
 
 	// from := mail.NewEmail("Paysorted Admin Team", "noreply@ynotsoft.com")
 
@@ -82,7 +91,7 @@ func SendMail(fromSender *mail.Email, toTargets []goexcel.Contact, subject strin
 		addresses[i].Name = contact.Firstname
 
 		message := mail.NewSingleEmail(fromSender, subject, &addresses[i], plainText, html)
-		client := sendgrid.NewSendClient(os.Getenv("SENDGRID_API_KEY"))
+		client := sendgrid.NewSendClient(sendgridKey)
 		response, err := client.Send(message)
 		if err != nil {
 			log.Println(err)
@@ -92,7 +101,7 @@ func SendMail(fromSender *mail.Email, toTargets []goexcel.Contact, subject strin
 			fmt.Printf("Email Status: %v \n\n", response.StatusCode)
 			if response.StatusCode == 401 {
 				fmt.Printf("Error: Requires Authentication! Please Try Again... \n\n\n")
-			} else if response.StatusCode == 200 {
+			} else if response.StatusCode == 202 {
 				fmt.Printf("Completed! Email Succussfully Sent \n\n\n")
 
 			}

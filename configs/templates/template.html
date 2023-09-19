@@ -344,6 +344,27 @@
 																							"
 																						>
 																							<div class="contact-details">
+																								{{ range .contacts.Firstname }}
+																							    <p class="pheading">
+																									Hi {{ .Firstname}} <br>
+																								</p>
+																								{{ end }}
+																							</div>
+																						</td>
+																					</tr>
+																					<tr>
+																						<td
+																							class="text center"
+																							style="
+																								color: #666666;
+																								font-family: Arial, sans-serif;
+																								font-size: 16px;
+																								line-height: 30px;
+																								min-width: auto !important;
+																								text-align: left;
+																							"
+																						>
+																							<div class="contact-details">
 																							    <p class="pheading">
 																									Thank you for choosing Paysorted as your payroll service. We’re always striving to deliver the best experience to our members, and we would like to hear your thoughts
 																									Please let us know how you feel about our service and if there are any ways we can help you in the future by clicking on the link below and leaving a review on our Google profile.
