@@ -5,3 +5,5 @@ target_list.txt
 /bin
 /configs/uploads/
 .xlsx
+.exe
+gomail

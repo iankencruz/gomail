@@ -27,13 +27,11 @@ func uploadHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fmt.Println(file)
-
 	// =========================
 	// TODO Do Email Stuff Here
 	// =========================
 
-	fmt.Println("\nReading Files & Creating Email")
+	fmt.Println("\nReading Files & Creating Email\n")
 
 	// * =================================
 	// *  Set Mailer Authentication and send data
