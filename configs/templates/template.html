@@ -344,11 +344,11 @@
 																							"
 																						>
 																							<div class="contact-details">
-																								{{ range .contacts.Firstname }}
 																							    <p class="pheading">
-																									Hi {{ .Firstname}} <br>
+																									Hi {{ .Firstname}}, 
+																									<br><br>
+																									Hope you are well.
 																								</p>
-																								{{ end }}
 																							</div>
 																						</td>
 																					</tr>
@@ -366,18 +366,24 @@
 																						>
 																							<div class="contact-details">
 																							    <p class="pheading">
-																									Thank you for choosing Paysorted as your payroll service. We’re always striving to deliver the best experience to our members, and we would like to hear your thoughts
-																									Please let us know how you feel about our service and if there are any ways we can help you in the future by clicking on the link below and leaving a review on our Google profile.
-																									
+																									This is a quick reminder for you to submit your timesheets to admin@ynotconsulting.com.au or update your
+																									yTime timesheet for the period from <span style="font-weight: bold;">{{ .StartDate }}</span> to <span style="font-weight: bold;">{{ .EndDate }}</span>.
+																									If you are a sub-contractor or service provider to us,  please send your invoice for the above 
+																									period along with your approved timesheet for us to process your invoice.
+
 																								</p>
 																							</div>
-																							    
-																							<a href="https://g.page/r/CQm4-LdGl0LIEAI/review" class="review-button" > Submit a review</a>
-																								
+																							 
 																							<div class="contact-details" >
 																							    <p class="pheading">
-																									Reviews help build trust and allow Paysorted to stand out in the crowd so that others like yourself are able to find us and feel confident about choosing Paysorted for their contractor payroll services.
-																									
+																									We will be processing your pay or invoices by this weekend,
+																									<span style="font-weight: bold;">{{ .ProcessingDate }}</span>.
+																								</p>
+																							</div>
+																							<div class="contact-details" >
+																							    <p class="pheading">
+																									Should you require further assistance please contact us on 
+																									<span style="font-weight: bold;"><a href="tel=0251344968">02 5134 4968</a></span> or <span style="font-weight: bold;"><a href="mailto:admin@ynotconsulting.com.au">admin@ynotconsulting.com.au</a></span>
 																								</p>
 																							</div>
 																						</td>

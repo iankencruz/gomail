@@ -33,6 +33,8 @@ func uploadHandler(w http.ResponseWriter, r *http.Request) {
 	// TODO Do Email Stuff Here
 	// =========================
 
+	fmt.Println("\nReading Files & Creating Email")
+
 	// * =================================
 	// *  Set Mailer Authentication and send data
 	// * =================================
@@ -48,8 +50,6 @@ func uploadHandler(w http.ResponseWriter, r *http.Request) {
 	//=  that is stored in /config/templates/ & then passing the struct data
 	//=  Created earlier to pass dynamic content to the template file.
 
-	htmlContent := mailer.PrepareTemplates("template.html", contacts)
-
 	//=  Setup Sender details, must be authenticated with the correct domain
 	//=  otherwise sendgrid throws authentication error
 	from := mail.NewEmail("Paysorted Admin Team", "noreply@ynotsoft.com")
@@ -62,12 +62,14 @@ func uploadHandler(w http.ResponseWriter, r *http.Request) {
 	// }
 
 	// Sendgrid Sendmail Function
-	mailer.SendMail(from, contacts, "subject", plainTextContent, htmlContent, os.Getenv("SENDGRID_API_KEY"))
+	mailer.SendMail(r, "template.html", from, contacts, "subject", plainTextContent, os.Getenv("SENDGRID_API_KEY"))
+
+	fmt.Println("\nFinished Parsing Templates && Email Contacts\n")
 
 	// ==================================
 	// = Handles deleting uploaded file uploaded at ./uploads folderex
 	// ==================================
-	// deleteFile(w, r, file, fileHeader)
+	deleteFile(w, r, file, fileHeader)
 
 	w.Header().Add("Content-Type", "text/html")
 	http.ServeFile(w, r, "./configs/web/success.html")
