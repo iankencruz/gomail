@@ -61,8 +61,10 @@ func uploadHandler(w http.ResponseWriter, r *http.Request) {
 	// 	fmt.Printf("Target Phone: %v \n", target.Phone)
 	// }
 
+	sbjct := "Timesheet Reminder || TEST "
+
 	// Sendgrid Sendmail Function
-	mailer.SendMail(r, "template.html", from, contacts, "subject", plainTextContent, os.Getenv("SENDGRID_API_KEY"))
+	mailer.SendMail(r, "template.html", from, contacts, sbjct, plainTextContent, os.Getenv("SENDGRID_API_KEY"))
 
 	fmt.Println("\nFinished Parsing Templates && Email Contacts\n")
 

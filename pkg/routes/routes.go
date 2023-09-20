@@ -1,13 +1,20 @@
 package routes
 
-import "net/http"
+import (
+	"log"
+	"net/http"
+)
 
 func InitializeRoutes() {
+
+	addr := ":8080"
+
 	mux := http.NewServeMux()
 
 	mux.HandleFunc("/", indexHandler)
 	mux.HandleFunc("/upload", uploadHandler)
 	mux.HandleFunc("/exit", closeHandler)
 
-	http.ListenAndServe(":8000", mux)
+	log.Printf("listening on localhost%v", addr)
+	log.Fatal(http.ListenAndServe(addr, mux))
 }
