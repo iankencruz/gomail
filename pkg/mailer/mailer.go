@@ -70,15 +70,17 @@ type MailBody struct {
 	Firstname      string
 	StartDate      string
 	EndDate        string
+	DeadlineDate   string
 	ProcessingDate string
 }
 
 // NewEmail ...
-func NewMailBody(fname string, start string, end string, processDate string) *MailBody {
+func NewMailBody(fname string, start string, end string, deadline string, processDate string) *MailBody {
 	return &MailBody{
 		Firstname:      fname,
 		StartDate:      start,
 		EndDate:        end,
+		DeadlineDate:   deadline,
 		ProcessingDate: processDate,
 	}
 }
@@ -100,28 +102,17 @@ func SendMail(r *http.Request, file string, fromSender *mail.Email, toTargets []
 
 	// * Get Date Input Value
 	inputStartDate := r.PostFormValue("startdate")
-	inputEndDate := r.PostFormValue("enddate")
-	inputProcessDate := r.PostFormValue("processingdate")
 
 	startDate, err := time.Parse("2006-01-02", inputStartDate)
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
-	endDate, err := time.Parse("2006-01-02", inputEndDate)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-	processDate, err := time.Parse("2006-01-02", inputProcessDate)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
+
 	// * Format Date Input
-	fmtStartDate := startDate.Format("02/01/2006")
-	fmtEndDate := endDate.Format("02/01/2006")
-	fmtProcessDate := processDate.Format("02/01/2006")
+	fmtEndDate := startDate.AddDate(0, 0, 13)
+	fmtDeadlineDate := startDate.AddDate(0, 0, 16)
+	fmtProcessDate := startDate.AddDate(0, 0, 20)
 
 	for _, contact := range toTargets {
 
@@ -130,7 +121,7 @@ func SendMail(r *http.Request, file string, fromSender *mail.Email, toTargets []
 		// Create sendgrid Contacts & send
 
 		target := mail.NewEmail(contact.Firstname, contact.Email)
-		mbody := NewMailBody(contact.Firstname, fmtStartDate, fmtEndDate, fmtProcessDate)
+		mbody := NewMailBody(contact.Firstname, startDate.Format("02/01/2006"), fmtEndDate.Format("02/01/2006"), fmtDeadlineDate.Format("02/01/2006"), fmtProcessDate.Format("02/01/2006"))
 
 		// Template Struct
 

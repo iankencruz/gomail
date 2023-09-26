@@ -15,6 +15,11 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 	http.ServeFile(w, r, "./configs/web/index.html")
 }
 
+func confirmationHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Add("Content-Type", "text/html")
+	http.ServeFile(w, r, "./configs/web/confirmation.html")
+}
+
 func uploadHandler(w http.ResponseWriter, r *http.Request) {
 	// truncated for brevity
 

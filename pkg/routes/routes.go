@@ -12,6 +12,7 @@ func InitializeRoutes() {
 	mux := http.NewServeMux()
 
 	mux.HandleFunc("/", indexHandler)
+	mux.HandleFunc("/confirmation", confirmationHandler)
 	mux.HandleFunc("/upload", uploadHandler)
 	mux.HandleFunc("/exit", closeHandler)
 
