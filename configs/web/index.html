@@ -1,57 +1,87 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>File upload demo</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            colors: {
-              clifford: '#da373d',
-            }
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>File upload demo</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            clifford: '#da373d',
           }
         }
       }
-    </script>
-  </head>
-  <body>
+    }
+  </script>
+</head>
 
-    <section class="bg-gray-50 dark:bg-gray-900">
-      <div class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
-          <a href="#" class="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white">
-              Powered by  
-              <span class="font-semibold text-blue-500">&nbsp; YNOT Consulting</span>
-              <svg class="w-8 h-8 ml-2 content-baseline" viewBox="0 0 1013 1013" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;"><g id="Symbol"><path d="M119.703,437.986c0,-0 51.364,10.201 162.86,2.459c255.477,-17.739 453.122,-319.344 453.122,-319.344l61.274,115.789l0,80.4c0,0 -238.691,283.14 -490.182,283.14c-123.219,0 -187.074,-1.643 -187.074,-1.643l0,-160.801Z" style="fill:#1153f8;"></path><path d="M119.703,602.976c0,0 51.364,-10.201 162.86,-2.459c256.8,17.831 459.811,327.046 459.811,327.046l54.585,-123.491l0,-80.4c0,-0 -231.546,-283.14 -490.182,-283.14c-123.219,-0 -187.074,1.643 -187.074,1.643l0,160.801Z" style="fill:#1153f8;"></path><path d="M405.456,1012.48c-231.505,-48.995 -405.456,-254.693 -405.456,-500.699c0,-282.458 229.32,-511.778 511.778,-511.778c246.006,0 451.704,173.951 500.699,405.456l-174.638,-0c-44.789,-137.269 -173.92,-236.569 -326.061,-236.569c-189.247,-0 -342.891,153.644 -342.891,342.891c-0,152.141 99.3,281.272 236.569,326.061l-0,174.638Zm212.644,-174.638c103.79,-33.866 185.873,-115.949 219.739,-219.739l174.638,0c-41.735,197.202 -197.175,352.642 -394.377,394.377l0,-174.638Z" style="fill:#1153f8;"></path></g></svg>
-          </a>
-          <a href="#" class="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white">
-              <img src="https://minio.ynotsoft.com/ynot-assets/public/Uploads/Paysorted_logo_light__ScaleMaxHeightWzcwXQ.png" alt="Paysorted Logo" class="h-12 w-full">
-          </a>
-          <div class="w-full p-6 bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md dark:bg-gray-800 dark:border-gray-700 sm:p-8">
-              <h2 class="mb-1 text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
-                  Timesheet Reminder Emailer
-              </h2>
-              <form class="mt-4 space-y-4 lg:mt-5 md:space-y-5" action="/confirmation" method="POST" id="form" enctype="multipart/form-data">
-                  <div>
-                      <label class="block mb-2  text-sm font-medium text-gray-900 dark:text-white" for="file_input">Upload contacts file</label>
-                      <input required class="block w-full h-10 file:h-10 text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 " id="file_input" type="file" name="file">
+<body>
 
-                  </div>
-                  <div>
-                      <label for="startdate" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Start Date</label>
-                      <input required type="date" name="startdate" id="startdate" placeholder="date" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required="">
-                  </div>
-                  <button type="submit" class="w-full text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-500 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Submit</button>
-                </form>
-              <form class="mt-4 space-y-4 lg:mt-5 md:space-y-5" action="/exit" method="POST" id="form" enctype="multipart/form-data">
-                <button type="submit" name="exit" value="exit" class="w-full text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-red-500 dark:hover:bg-red-800 dark:focus:ring-red-800">Close</button>
-              </form>
+  <section class="bg-gray-50 dark:bg-gray-900">
+    <div class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
+      <a href="#" class="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white">
+        Powered by
+        <span class="font-semibold text-blue-500">&nbsp; YNOT Consulting</span>
+        <svg class="w-8 h-8 ml-2 content-baseline" viewBox="0 0 1013 1013" version="1.1"
+          xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve"
+          xmlns:serif="http://www.serif.com/"
+          style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+          <g id="Symbol">
+            <path
+              d="M119.703,437.986c0,-0 51.364,10.201 162.86,2.459c255.477,-17.739 453.122,-319.344 453.122,-319.344l61.274,115.789l0,80.4c0,0 -238.691,283.14 -490.182,283.14c-123.219,0 -187.074,-1.643 -187.074,-1.643l0,-160.801Z"
+              style="fill:#1153f8;"></path>
+            <path
+              d="M119.703,602.976c0,0 51.364,-10.201 162.86,-2.459c256.8,17.831 459.811,327.046 459.811,327.046l54.585,-123.491l0,-80.4c0,-0 -231.546,-283.14 -490.182,-283.14c-123.219,-0 -187.074,1.643 -187.074,1.643l0,160.801Z"
+              style="fill:#1153f8;"></path>
+            <path
+              d="M405.456,1012.48c-231.505,-48.995 -405.456,-254.693 -405.456,-500.699c0,-282.458 229.32,-511.778 511.778,-511.778c246.006,0 451.704,173.951 500.699,405.456l-174.638,-0c-44.789,-137.269 -173.92,-236.569 -326.061,-236.569c-189.247,-0 -342.891,153.644 -342.891,342.891c-0,152.141 99.3,281.272 236.569,326.061l-0,174.638Zm212.644,-174.638c103.79,-33.866 185.873,-115.949 219.739,-219.739l174.638,0c-41.735,197.202 -197.175,352.642 -394.377,394.377l0,-174.638Z"
+              style="fill:#1153f8;"></path>
+          </g>
+        </svg>
+      </a>
+      <a href="#" class="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white">
+        <img src="https://minio.ynotsoft.com/ynot-assets/public/Uploads/Paysorted_logo_light__ScaleMaxHeightWzcwXQ.png"
+          alt="Paysorted Logo" class="h-12 w-full">
+      </a>
+      <div
+        class="w-full p-6 bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md dark:bg-gray-800 dark:border-gray-700 sm:p-8">
+        <h2 class="mb-1 text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
+          Timesheet Reminder Emailer
+        </h2>
+        <form class="mt-4 space-y-4 lg:mt-5 md:space-y-5" action="/upload" method="POST" id="form"
+          enctype="multipart/form-data">
+          <div>
+            <label class="block mb-2  text-sm font-medium text-gray-900 dark:text-white" for="file_input">Upload
+              contacts file</label>
+            <input required
+              class="block w-full h-10 file:h-10 text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 "
+              id="file_input" type="file" name="file">
+
           </div>
+          <div>
+            <label for="startdate" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Start
+              Date</label>
+            <input required type="date" name="startdate" id="startdate" placeholder="date"
+              class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              required="">
+          </div>
+          <button type="submit"
+            class="w-full text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-500 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Submit</button>
+        </form>
+        <form class="mt-4 space-y-4 lg:mt-5 md:space-y-5" action="/exit" method="POST" id="form"
+          enctype="multipart/form-data">
+          <button type="submit" name="exit" value="exit"
+            class="w-full text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-red-500 dark:hover:bg-red-800 dark:focus:ring-red-800">Close</button>
+        </form>
       </div>
-    </section>
+    </div>
+  </section>
 
-  </body>
+</body>
+
 </html>

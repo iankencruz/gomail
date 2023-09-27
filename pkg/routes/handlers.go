@@ -66,18 +66,23 @@ func uploadHandler(w http.ResponseWriter, r *http.Request) {
 
 	sbjct := "Timesheet Reminder || TEST "
 
-	// Sendgrid Sendmail Function
-	mailer.SendMail(r, "template.html", from, contacts, sbjct, plainTextContent, os.Getenv("SENDGRID_API_KEY"))
+	for _, contact := range contacts {
 
-	fmt.Println("\nFinished Parsing Templates && Email Contacts\n")
+		mContact := goexcel.CreateEmailContact(contact)
+		htmlBody := mailer.ParseTemplate(r, "template.html", &mContact)
 
-	// ==================================
-	// = Handles deleting uploaded file uploaded at ./uploads folderex
-	// ==================================
+		// Sendgrid Sendmail Function
+		mailer.SendMail(from, &mContact, sbjct, plainTextContent, htmlBody, os.Getenv("SENDGRID_API_KEY"))
+		fmt.Println("\nFinished Parsing Templates && Email Contacts\n")
+
+		// ==================================
+		// = Handles deleting uploaded file uploaded at ./uploads folderex
+		// ==================================
+
+		w.Header().Add("Content-Type", "text/html")
+		http.ServeFile(w, r, "./configs/web/success.html")
+	}
 	deleteFile(w, r, file, fileHeader)
-
-	w.Header().Add("Content-Type", "text/html")
-	http.ServeFile(w, r, "./configs/web/success.html")
 
 }
 

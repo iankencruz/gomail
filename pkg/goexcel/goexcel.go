@@ -3,6 +3,7 @@ package goexcel
 import (
 	"fmt"
 
+	"github.com/sendgrid/sendgrid-go/helpers/mail"
 	"github.com/xuri/excelize/v2"
 )
 
@@ -47,4 +48,12 @@ func ReadExcelFile(input string) []Contact {
 	}
 
 	return contacts
+}
+
+func CreateEmailContact(c Contact) mail.Email {
+	var m mail.Email
+	m.Address = c.Email
+	m.Name = c.Firstname
+
+	return m
 }

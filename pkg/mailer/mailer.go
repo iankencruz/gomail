@@ -8,7 +8,6 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/iankencruz/gomail/pkg/goexcel"
 	"github.com/sendgrid/sendgrid-go"
 	"github.com/sendgrid/sendgrid-go/helpers/mail"
 )
@@ -32,7 +31,7 @@ func NewPayrollTemplate(fname string, start time.Time) *PayrollTemplate {
 	}
 }
 
-func ParseTemplate(file string, r *http.Request) (s string) {
+func ParseTemplate(r *http.Request, file string, c *mail.Email) (s string) {
 
 	t := template.New(file) // Try without dir path
 
@@ -56,7 +55,7 @@ func ParseTemplate(file string, r *http.Request) (s string) {
 		return err.Error()
 	}
 
-	mbody := NewPayrollTemplate(file, startDate)
+	mbody := NewPayrollTemplate(c.Name, startDate)
 
 	var body bytes.Buffer
 
@@ -72,39 +71,22 @@ func ParseTemplate(file string, r *http.Request) (s string) {
 
 }
 
-func SendMail(r *http.Request, file string, fromSender *mail.Email, toTargets []goexcel.Contact, subject string, plainText string, sendgridKey string) {
+func SendMail(from *mail.Email, to *mail.Email, subject string, plainText string, html string, sendgridKey string) {
 
-	for _, contact := range toTargets {
+	message := mail.NewSingleEmail(from, subject, to, plainText, html)
+	client := sendgrid.NewSendClient(sendgridKey)
+	response, err := client.Send(message)
+	if err != nil {
+		log.Println(err)
+	} else {
+		fmt.Printf("#################################### \n")
+		fmt.Printf("Sending Email To: %v \n\n", to)
+		fmt.Printf("Email Status: %v \n\n", response.StatusCode)
+		if response.StatusCode == 401 {
+			fmt.Printf("Error: Requires Authentication! Please Try Again... \n\n\n")
+		} else if response.StatusCode == 202 {
+			fmt.Printf("Completed! Email Succussfully Sent \n\n\n")
 
-		var body bytes.Buffer
-
-		// Create sendgrid Contacts & send
-
-		target := mail.NewEmail(contact.Firstname, contact.Email)
-
-		// Template Struct
-		t.Execute(&body, mbody)
-		if err != nil {
-			fmt.Printf("Error: func t.Execute: %v", err)
-		}
-
-		htmlBody := body.String()
-
-		message := mail.NewSingleEmail(fromSender, subject, target, plainText, htmlBody)
-		client := sendgrid.NewSendClient(sendgridKey)
-		response, err := client.Send(message)
-		if err != nil {
-			log.Println(err)
-		} else {
-			fmt.Printf("#################################### \n")
-			fmt.Printf("Sending Email To: %v \n\n", target)
-			fmt.Printf("Email Status: %v \n\n", response.StatusCode)
-			if response.StatusCode == 401 {
-				fmt.Printf("Error: Requires Authentication! Please Try Again... \n\n\n")
-			} else if response.StatusCode == 202 {
-				fmt.Printf("Completed! Email Succussfully Sent \n\n\n")
-
-			}
 		}
 	}
 
