@@ -19,34 +19,14 @@ func uploadFile(w http.ResponseWriter, r *http.Request) (multipart.File, *multip
 
 	defer file.Close()
 
-	// err = r.ParseForm()
-	// if err != nil {
-	// 	fmt.Println("Error Parsing Form")
-	// 	return file, fileHeader, err
-	// }
-
-	// // * Get Date Input Value
-	// dateValue := r.PostFormValue("date")
-
-	// date, err := time.Parse("2006-01-02", dateValue)
-	// if err != nil {
-	// 	fmt.Println(err)
-	// 	return file, fileHeader, err
-	// }
-	// // * Format Date Input
-	// formatDate := date.Format("02-01-2006")
-
-	// fmt.Printf("Hello, %s!", formatDate)
-
-	// * Create the uploads folder if it doesn't
-	// * already exist
+	//  Create the uploads folder if it doesn't already exist
 	err = os.MkdirAll("./configs/uploads", os.ModePerm)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return file, fileHeader, err
 	}
 
-	// * Create a new file in the uploads directory
+	//  Create a new file in the uploads directory
 	dst, err := os.Create(fmt.Sprintf("./configs/uploads/%s", fileHeader.Filename))
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
