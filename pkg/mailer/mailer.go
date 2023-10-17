@@ -4,12 +4,16 @@ import (
 	"bytes"
 	"fmt"
 	"html/template"
+	"io"
 	"log"
+	"mime/multipart"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/sendgrid/sendgrid-go"
 	"github.com/sendgrid/sendgrid-go/helpers/mail"
+	"github.com/xuri/excelize/v2"
 )
 
 type PayrollTemplate struct {
@@ -91,3 +95,108 @@ func SendMail(from *mail.Email, to *mail.Email, subject string, plainText string
 	}
 
 }
+
+
+
+type Contact struct {
+	Firstname string
+	Lastname  string
+	Email     string
+	Phone     string
+}
+
+
+// Returns a contact struct
+func ReadExcelFile(input string) []Contact {
+
+	var contacts []Contact
+	var cPersons Contact
+
+	f, err := excelize.OpenFile(input)
+	if err != nil {
+		fmt.Printf("Error: %v",err)
+		return contacts
+	}
+
+	rows, err := f.GetRows("Sheet1")
+	if err != nil {
+		fmt.Printf("Error: %v",err)
+		return contacts
+	}
+
+	for _, row := range rows[1:] {
+		// append column values to slice
+		cPersons.Firstname = row[1]
+		cPersons.Lastname = row[2]
+		cPersons.Email = row[3]
+		cPersons.Phone = row[4]
+
+		contacts = append(contacts, cPersons)
+	}
+
+	return contacts
+}
+
+func CreateEmailContact(c Contact) mail.Email {
+	var m mail.Email
+	m.Address = c.Email
+	m.Name = c.Firstname
+
+	return m
+}
+
+
+
+
+
+// Files
+
+// * Upload File and store in projects uploads directory
+func UploadFile(w http.ResponseWriter, r *http.Request) (multipart.File, *multipart.FileHeader, error) {
+	file, fileHeader, err := r.FormFile("file")
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return file, fileHeader, err
+	}
+
+	defer file.Close()
+
+	//  Create the uploads folder if it doesn't already exist
+	err = os.MkdirAll("./configs/uploads", os.ModePerm)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return file, fileHeader, err
+	}
+
+	//  Create a new file in the uploads directory
+	dst, err := os.Create(fmt.Sprintf("./configs/uploads/%s", fileHeader.Filename))
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return file, fileHeader, err
+	}
+
+	defer dst.Close()
+
+	// Copy the uploaded file to the filesystem
+	// at the specified destination
+	_, err = io.Copy(dst, file)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return file, fileHeader, err
+	}
+
+	fmt.Printf("\n\nUpload successful\n\n")
+
+	return file, fileHeader, err
+}
+
+// * Delete uploaded file from projects uploads directory
+func DeleteFile(w http.ResponseWriter, r *http.Request, file multipart.File, fileHeader *multipart.FileHeader) {
+	fmt.Printf("Deleting uploaded file %s \n", fileHeader.Filename)
+	err := os.Remove(fmt.Sprintf("./configs/uploads/%s", fileHeader.Filename))
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Printf("Successfully deleted:  %s \n", fileHeader.Filename)
+}
+
