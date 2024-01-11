@@ -1,21 +1,22 @@
-package routes
+package main
 
 import (
-	"log"
 	"net/http"
+
+	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/chi/v5/middleware"
 )
 
-func InitializeRoutes() {
+// "log"
+// "net/http"
 
-	addr := ":8080"
+func (app *application) routes() http.Handler {
 
-	mux := http.NewServeMux()
+	r := chi.NewRouter()
 
-	mux.HandleFunc("/", indexHandler)
-	mux.HandleFunc("/confirmation", confirmationHandler)
-	mux.HandleFunc("/upload", uploadHandler)
-	mux.HandleFunc("/exit", closeHandler)
+	r.Use(middleware.Logger)
 
-	log.Printf("listening on localhost%v", addr)
-	log.Fatal(http.ListenAndServe(addr, mux))
+	r.Get("/", app.home)
+
+	return r
 }
