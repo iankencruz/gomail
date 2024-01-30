@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"net/http"
-	"time"
 	// "github.com/iankencruz/gomail/pkg/mailer"
 )
 
@@ -15,9 +14,10 @@ func (app *application) home(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	app.render(w, r, http.StatusOK, "home.tmpl", templateData{
-		Contacts: contacts,
-	})
+	data := app.newTemplateData(r)
+	data.Contacts = contacts
+
+	app.render(w, r, http.StatusOK, "home.tmpl", data)
 
 }
 
@@ -31,12 +31,6 @@ func (app *application) contactCreatePost(w http.ResponseWriter, r *http.Request
 // func (app *application) contactGetAll(w http.ResponseWriter, r *http.Request) {
 // 	w.Write([]byte("Get All Contacts"))
 // }
-
-func (app *application) newTemplateData(r *http.Request) templateData {
-	return templateData{
-		CurrentYear: time.Now().Year(),
-	}
-}
 
 // func confirmationHandler(w http.ResponseWriter, r *http.Request) {
 // 	w.Header().Add("Content-Type", "text/html")

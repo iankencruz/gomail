@@ -14,7 +14,7 @@ type templateData struct {
 }
 
 func humanDate(t time.Time) string {
-	return t.Format("02 Jan 2006 at 15:04")
+	return t.Format("02/01/2006")
 }
 
 var functions = template.FuncMap{
@@ -40,16 +40,18 @@ func newTemplateCache() (map[string]*template.Template, error) {
 		// and assign it to the name variable
 		name := filepath.Base(page)
 
-		// Create sice containing the filepaths for our templates
-		files := []string{
-			"./ui/html/base.tmpl",
-			"./ui/html/partials/navigation.tmpl",
-			"./ui/html/partials/footer.tmpl",
-			page,
+		ts, err := template.New(name).Funcs(functions).ParseFiles("./ui/html/base.tmpl")
+		if err != nil {
+			return nil, err
 		}
 
 		// Parse the files into a template set
-		ts, err := template.ParseFiles(files...)
+		ts, err = ts.ParseGlob("./ui/html/partials/*.tmpl")
+		if err != nil {
+			return nil, err
+		}
+
+		ts, err = ts.ParseFiles(page)
 		if err != nil {
 			return nil, err
 		}
