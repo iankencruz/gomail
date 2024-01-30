@@ -1,6 +1,20 @@
 # HTML Template Emailer built in GO
 
+# Command to jump into docker container
+
+docker exec -it mysql_db bash
+
+# Enter mysql inside of container
+
+mysql -h 127.0.0.1 -P 3306 -u root -p
+
+# Change to snippetbox database
+
+use snippetbox
+
+# Change to snippets |
 
 
-### Build command for windows 
+
+### Build command for windows
 ❯ GOOS=windows GOARCH=amd64 go build -o dist/gomail.exe mail.go

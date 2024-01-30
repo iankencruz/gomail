@@ -1,25 +1,41 @@
 package main
 
 import (
-	// "fmt"
 	"fmt"
-	"log"
 	"net/http"
-	"os"
-	// "os"
+	"time"
 	// "github.com/iankencruz/gomail/pkg/mailer"
 )
 
 func (app *application) home(w http.ResponseWriter, r *http.Request) {
-	contacts, err := app.contacts.GetContacts()
-	if err != nil {
-		log.Fatal(err)
-		os.Exit(0)
-	}
-	w.Header().Add("Content-Type", "text/html")
-	http.ServeFile(w, r, "./ui/html/index.html")
-	fmt.Printf("FirstName: %s ", contacts[0].FirstName)
 
+	contacts, err := app.contacts.GetAllContacts()
+	if err != nil {
+		fmt.Printf("Server Error: %s", err.Error())
+		return
+	}
+
+	app.render(w, r, http.StatusOK, "home.tmpl", templateData{
+		Contacts: contacts,
+	})
+
+}
+
+func (app *application) contactCreate(w http.ResponseWriter, r *http.Request) {
+
+}
+
+func (app *application) contactCreatePost(w http.ResponseWriter, r *http.Request) {
+}
+
+// func (app *application) contactGetAll(w http.ResponseWriter, r *http.Request) {
+// 	w.Write([]byte("Get All Contacts"))
+// }
+
+func (app *application) newTemplateData(r *http.Request) templateData {
+	return templateData{
+		CurrentYear: time.Now().Year(),
+	}
 }
 
 // func confirmationHandler(w http.ResponseWriter, r *http.Request) {
