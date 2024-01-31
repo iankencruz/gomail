@@ -2,6 +2,7 @@ package models
 
 import (
 	"database/sql"
+	"errors"
 	"time"
 )
 
@@ -31,7 +32,23 @@ func (c *ContactModel) Insert(firstname string, lastname string, email string, p
 }
 
 func (c *ContactModel) Get(id int) (Contact, error) {
-	return Contact{}, nil
+	// SQL statement
+	stmt := `SELECT id, firstname, lastname, email, phone, created FROM contacts WHERE id = ?`
+
+	// Create an empty Contact holder
+	var ct Contact
+
+	// Query Row on our DB
+	err := c.DB.QueryRow(stmt, id).Scan(&ct.ID, &ct.FirstName, &ct.LastName, &ct.Email, &ct.Phone, &ct.Created)
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return Contact{}, ErrNoRecord
+		} else {
+			return Contact{}, err
+		}
+	}
+
+	return ct, nil
 }
 
 func (c *ContactModel) GetAllContacts() ([]Contact, error) {

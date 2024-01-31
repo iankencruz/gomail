@@ -1,8 +1,13 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"net/http"
+	"strconv"
+
+	"github.com/go-chi/chi/v5"
+	"github.com/iankencruz/gomail/internal/models"
 	// "github.com/iankencruz/gomail/pkg/mailer"
 )
 
@@ -19,6 +24,35 @@ func (app *application) home(w http.ResponseWriter, r *http.Request) {
 
 	app.render(w, r, http.StatusOK, "home.tmpl", data)
 
+}
+
+func (app *application) contactView(w http.ResponseWriter, r *http.Request) {
+	idParam := chi.URLParam(r, "id")
+
+	id, err := strconv.Atoi(idParam)
+	if err != nil || id < 1 {
+		fmt.Printf("Server Error: %v", err.Error())
+		return
+	}
+
+	contact, err := app.contacts.Get(id)
+
+	// Check Error
+	if err != nil {
+		if errors.Is(err, models.ErrNoRecord) {
+			fmt.Printf("Server Error: %v", err.Error())
+		} else {
+			fmt.Printf("Server Error: %v", err.Error())
+		}
+		return
+	}
+	// Logging URL Param
+	// fmt.Printf("%+v", contact)
+
+	data := app.newTemplateData(r)
+	data.Contact = contact
+
+	app.render(w, r, http.StatusOK, "contactView.tmpl", data)
 }
 
 func (app *application) contactCreate(w http.ResponseWriter, r *http.Request) {

@@ -10,6 +10,7 @@ import (
 
 type templateData struct {
 	CurrentYear int
+	Contact     models.Contact
 	Contacts    []models.Contact
 }
 

@@ -18,6 +18,7 @@ import (
 type application struct {
 	// TODO: add models
 	title         string
+	contact       *models.Contact
 	contacts      *models.ContactModel
 	templateCache map[string]*template.Template
 }
