@@ -24,7 +24,11 @@ func (app *application) routes() http.Handler {
 
 	// Create Routes and assign handlers
 	r.Get("/", app.home)
-	r.Get("/contact/view/{id}", app.contactView)
+
+	// Contacts Routes
+	r.Get("/contacts", app.listcontacts)
+	r.Get("/contacts/view/{id}", app.contactView)
+	r.Delete("/contacts/view/{id}", app.deleteContact)
 	r.Get("/contacts/create", app.contactCreate)
 	r.Post("/contacts/create", app.contactCreatePost)
 

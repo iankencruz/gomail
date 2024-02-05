@@ -1,0 +1,16 @@
+{{define "contactlist"}}
+
+<div
+  class="fixed inset-y-0 left-20 hidden w-96 overflow-y-auto border-r border-gray-200 px-4 py-6 sm:px-6 lg:px-8 xl:block">
+  <!-- Secondary column (hidden on smaller screens) -->
+  <fieldset>
+    <legend class="text-base font-semibold leading-6 text-gray-900">Members</legend>
+    <div id="contact-list" class="mt-4 divide-y divide-gray-200 border-b border-t border-gray-200">
+      {{range .Contacts}}
+      {{template "contactitem".}}
+      {{end}}
+    </div>
+  </fieldset>
+
+</div>
+{{end}}

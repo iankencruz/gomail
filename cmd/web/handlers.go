@@ -26,6 +26,33 @@ func (app *application) home(w http.ResponseWriter, r *http.Request) {
 
 }
 
+func (app *application) deleteContact(w http.ResponseWriter, r *http.Request) {
+	// get id Param
+	idParam := chi.URLParam(r, "id")
+
+	id, err := strconv.Atoi(idParam)
+	if err != nil {
+		fmt.Printf("Server Error: %v", err.Error())
+		return
+	}
+
+	app.contacts.Delete(id)
+	http.Redirect(w, r, "/contacts", http.StatusSeeOther)
+}
+
+func (app *application) listcontacts(w http.ResponseWriter, r *http.Request) {
+	contacts, err := app.contacts.GetAllContacts()
+	if err != nil {
+		fmt.Printf("Server Error: %s", err.Error())
+		return
+	}
+
+	data := app.newTemplateData(r)
+	data.Contacts = contacts
+
+	app.render(w, r, http.StatusOK, "contacts.tmpl", data)
+}
+
 func (app *application) contactView(w http.ResponseWriter, r *http.Request) {
 	idParam := chi.URLParam(r, "id")
 
@@ -52,14 +79,43 @@ func (app *application) contactView(w http.ResponseWriter, r *http.Request) {
 	data := app.newTemplateData(r)
 	data.Contact = contact
 
-	app.render(w, r, http.StatusOK, "contactView.tmpl", data)
+	app.render(w, r, http.StatusOK, "contact_view.tmpl", data)
 }
 
 func (app *application) contactCreate(w http.ResponseWriter, r *http.Request) {
+	// w.Write([]byte("contactCreate Form : Get Request"))
+	contacts, err := app.contacts.GetAllContacts()
+	if err != nil {
+		fmt.Printf("Server Error: %s", err.Error())
+		return
+	}
+	data := app.newTemplateData(r)
+	data.Contacts = contacts
 
+	app.render(w, r, http.StatusOK, "contact_create.tmpl", data)
 }
 
 func (app *application) contactCreatePost(w http.ResponseWriter, r *http.Request) {
+	err := r.ParseForm()
+	if err != nil {
+		fmt.Printf("Server Error: %v", err.Error())
+		return
+	}
+
+	fname := r.PostForm.Get("first-name")
+	lname := r.PostForm.Get("last-name")
+	email := r.PostForm.Get("email")
+	phone := r.PostForm.Get("phone-number")
+
+	//TODO: Form Validation (Lets Go , Page 211/444)
+
+	_, err = app.contacts.Insert(fname, lname, email, phone)
+	if err != nil {
+		fmt.Printf("Server Error: %v", err.Error())
+		return
+	}
+
+	http.Redirect(w, r, "/contacts", http.StatusSeeOther)
 }
 
 // func (app *application) contactGetAll(w http.ResponseWriter, r *http.Request) {
