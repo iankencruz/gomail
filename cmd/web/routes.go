@@ -32,5 +32,9 @@ func (app *application) routes() http.Handler {
 	r.Get("/contacts/create", app.contactCreate)
 	r.Post("/contacts/create", app.contactCreatePost)
 
+	// Email Routes
+	r.Get("/emails/create", app.emailCreate)
+	r.Post("/emails/create", app.emailCreatePost)
+
 	return r
 }

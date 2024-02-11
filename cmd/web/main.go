@@ -20,6 +20,8 @@ type application struct {
 	title         string
 	contact       *models.Contact
 	contacts      *models.ContactModel
+	email         *models.Email
+	emails        *models.EmailModel
 	templateCache map[string]*template.Template
 }
 
@@ -52,6 +54,7 @@ func main() {
 
 	app := &application{
 		contacts:      &models.ContactModel{DB: db},
+		emails:        &models.EmailModel{DB: db},
 		templateCache: templateCache,
 	}
 

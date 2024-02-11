@@ -1,9 +1,15 @@
 {{define "title"}}Contacts {{end}}
 
 {{define "main"}}
-{{with .Contact}}
 <form action="#" method="POST" class="px-6 pb-24 pt-20 sm:pb-32 lg:px-8 lg:py-48 lg:ml-96">
   <div class="max-w-xl lg:max-w-7xl">
+
+    <!-- Display Any errors form errors -->
+    {{with .Form}}
+    {{template "formerror" . }}
+    {{end}}
+
+    {{with .Contact}}
     <div class="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
       <div>
         <label for="first-name" class="block text-sm font-semibold leading-6 text-gray-900">First name</label>

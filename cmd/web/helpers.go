@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"text/template"
 	"time"
 )
 
@@ -22,6 +23,16 @@ func (app *application) render(w http.ResponseWriter, r *http.Request, status in
 		fmt.Printf("Server Error: %s", err.Error())
 	}
 
+}
+
+func (app *application) renderPartial(w http.ResponseWriter, file string, partial string, data templateData) {
+	tmpl := template.Must(template.ParseFiles(file))
+
+	err := tmpl.ExecuteTemplate(w, partial, data)
+	if err != nil {
+		fmt.Printf("Server Error %s", err.Error())
+		return
+	}
 }
 
 func (app *application) newTemplateData(r *http.Request) templateData {

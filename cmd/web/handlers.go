@@ -8,8 +8,17 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/iankencruz/gomail/internal/models"
+	"github.com/iankencruz/gomail/internal/validator"
 	// "github.com/iankencruz/gomail/pkg/mailer"
 )
+
+type contactCreateForm struct {
+	Fname string
+	Lname string
+	Email string
+	Phone string
+	validator.Validator
+}
 
 func (app *application) home(w http.ResponseWriter, r *http.Request) {
 
@@ -31,6 +40,11 @@ func (app *application) deleteContact(w http.ResponseWriter, r *http.Request) {
 	idParam := chi.URLParam(r, "id")
 
 	id, err := strconv.Atoi(idParam)
+	if err != nil {
+		fmt.Printf("Server Error: %v", err.Error())
+		return
+	}
+
 	if err != nil {
 		fmt.Printf("Server Error: %v", err.Error())
 		return
@@ -102,20 +116,73 @@ func (app *application) contactCreatePost(w http.ResponseWriter, r *http.Request
 		return
 	}
 
-	fname := r.PostForm.Get("first-name")
-	lname := r.PostForm.Get("last-name")
-	email := r.PostForm.Get("email")
-	phone := r.PostForm.Get("phone-number")
+	// TODO: Automatic Form Decoder/Parsing
+	form := contactCreateForm{
+		Fname: r.PostForm.Get("first-name"),
+		Lname: r.PostForm.Get("last-name"),
+		Email: r.PostForm.Get("email"),
+		Phone: r.PostForm.Get("phone-number"),
+	}
 
-	//TODO: Form Validation (Lets Go , Page 211/444)
+	// Initialize a map to hold any validation errors for the form fields.
+	form.CheckField(validator.NotBlank(form.Fname), "first-name", "'First Name' cannot be blank")
+	form.CheckField(validator.NotBlank(form.Lname), "last-name", "'Last Name' cannot be blank")
+	form.CheckField(validator.NotBlank(form.Email), "email", "Email cannot be blank")
+	form.CheckField(validator.NotBlank(form.Phone), "phone-number", "Phone number  cannot be blank")
+	// check MaxChars of form
+	form.CheckField(validator.MaxChars(form.Fname, 100), "first-name", "First Name can be no longer than 100 characters")
+	form.CheckField(validator.MaxChars(form.Lname, 100), "last-name", "Last Name can be no longer than 100 characters")
+	form.CheckField(validator.MaxChars(form.Email, 100), "email", "Email can be no longer than 100 characters")
+	form.CheckField(validator.MaxChars(form.Phone, 10), "phone-number", "Phone number can be no longer than 10 characters")
 
-	_, err = app.contacts.Insert(fname, lname, email, phone)
+	form.CheckField(validator.EmailValidate(form.Email), "email", "This field must be a valid email address")
+
+	// TODO: Render Error to HTML
+	if !form.Valid() {
+		data := app.newTemplateData(r)
+		data.Form = form
+		// render error partial
+		app.render(w, r, http.StatusUnprocessableEntity, "contact_create.tmpl", data)
+		fmt.Printf("Form Validation Error: %v", form.FieldErrors)
+		return
+	}
+
+	id, err := app.contacts.Insert(form.Fname, form.Lname, form.Email, form.Phone)
 	if err != nil {
 		fmt.Printf("Server Error: %v", err.Error())
 		return
 	}
 
+	// TODO: Sessions to flash creation message
+
+	contact, err := app.contacts.Get(id)
+
+	data := app.newTemplateData(r)
+	data.Contact = contact
+	data.Form = form
+
+	// app.render(w, r, http.StatusOK, "contacts.tmpl", data)
+
 	http.Redirect(w, r, "/contacts", http.StatusSeeOther)
+}
+
+// EMAIL Handlers
+func (app *application) emailCreate(w http.ResponseWriter, r *http.Request) {
+	emails, err := app.emails.GetAllEmails()
+	if err != nil {
+		fmt.Printf("Server Error: %s", err.Error())
+		return
+	}
+
+	data := app.newTemplateData(r)
+	data.Emails = emails
+
+	app.render(w, r, http.StatusOK, "email_create.tmpl", data)
+
+}
+
+func (a *application) emailCreatePost(w http.ResponseWriter, r *http.Request) {
+
 }
 
 // func (app *application) contactGetAll(w http.ResponseWriter, r *http.Request) {

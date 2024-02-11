@@ -10,8 +10,11 @@ import (
 
 type templateData struct {
 	CurrentYear int
+	Email       models.Email
+	Emails      []models.Email
 	Contact     models.Contact
 	Contacts    []models.Contact
+	Form        any
 }
 
 func humanDate(t time.Time) string {
