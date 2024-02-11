@@ -1,17 +1,10 @@
 version: "3.3"
 services:
-  mailhog:
-    image: mailhog/mailhog
-    logging:
-      driver: "none" # disable saving logs
-    ports:
-      - 1025:1025 # smtp server
-      - 8025:8025 # web ui
   db:
     container_name: gomail_db
     image: mysql:5.7
     platform: linux/amd64
-    restart: always
+    restart: "no"
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: 1
 
