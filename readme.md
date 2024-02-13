@@ -2,7 +2,7 @@
 
 # Command to jump into docker container
 
-docker exec -it mysql_db bash
+docker exec -it gomail_db bash
 
 # Enter mysql inside of container
 

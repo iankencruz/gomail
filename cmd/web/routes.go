@@ -5,6 +5,7 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
+	"github.com/justinas/alice"
 )
 
 // "log"
@@ -22,19 +23,19 @@ func (app *application) routes() http.Handler {
 	fileServer := http.FileServer(http.Dir("./ui/static/"))
 	r.Handle("/static/*", http.StripPrefix("/static", fileServer))
 
-	// Create Routes and assign handlers
-	r.Get("/", app.home)
+	dynamic := alice.New(app.sessionManager.LoadAndSave)
 
-	// Contacts Routes
-	r.Get("/contacts", app.listcontacts)
-	r.Get("/contacts/view/{id}", app.contactView)
-	r.Delete("/contacts/view/{id}", app.deleteContact)
-	r.Get("/contacts/create", app.contactCreate)
-	r.Post("/contacts/create", app.contactCreatePost)
+	// Create Routes and assign handlers
+	r.Get("/", dynamic.ThenFunc(http.HandlerFunc(app.home)).ServeHTTP)
+	r.Get("/contacts", dynamic.ThenFunc(http.HandlerFunc(app.listcontacts)).ServeHTTP)
+	r.Get("/contacts/view/{id}", dynamic.ThenFunc(http.HandlerFunc(app.contactView)).ServeHTTP)
+	r.Delete("/contacts/view/{id}", dynamic.ThenFunc(http.HandlerFunc(app.deleteContact)).ServeHTTP)
+	r.Get("/contacts/create", dynamic.ThenFunc(http.HandlerFunc(app.contactCreate)).ServeHTTP)
+	r.Post("/contacts/create", dynamic.ThenFunc(http.HandlerFunc(app.contactCreatePost)).ServeHTTP)
 
 	// Email Routes
-	r.Get("/emails/create", app.emailCreate)
-	r.Post("/emails/create", app.emailCreatePost)
+	r.Get("/emails/create", dynamic.ThenFunc(http.HandlerFunc(app.emailCreate)).ServeHTTP)
+	r.Post("/emails/create", dynamic.ThenFunc(http.HandlerFunc(app.emailCreatePost)).ServeHTTP)
 
 	return r
 }

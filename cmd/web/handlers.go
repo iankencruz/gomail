@@ -147,7 +147,7 @@ func (app *application) contactCreatePost(w http.ResponseWriter, r *http.Request
 		return
 	}
 
-	id, err := app.contacts.Insert(form.Fname, form.Lname, form.Email, form.Phone)
+	_, err = app.contacts.Insert(form.Fname, form.Lname, form.Email, form.Phone)
 	if err != nil {
 		fmt.Printf("Server Error: %v", err.Error())
 		return
@@ -155,13 +155,10 @@ func (app *application) contactCreatePost(w http.ResponseWriter, r *http.Request
 
 	// TODO: Sessions to flash creation message
 
-	contact, err := app.contacts.Get(id)
-
-	data := app.newTemplateData(r)
-	data.Contact = contact
-	data.Form = form
-
-	// app.render(w, r, http.StatusOK, "contacts.tmpl", data)
+	// contact, err := app.contacts.Get(id)
+	// data := app.newTemplateData(r)
+	// data.Contact = contact
+	// data.Form = form
 
 	http.Redirect(w, r, "/contacts", http.StatusSeeOther)
 }

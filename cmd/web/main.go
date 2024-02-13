@@ -9,7 +9,10 @@ import (
 	"net/http"
 	"os"
 	"text/template"
+	"time"
 
+	"github.com/alexedwards/scs/mysqlstore"
+	"github.com/alexedwards/scs/v2"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/iankencruz/gomail/internal/models"
 	"github.com/joho/godotenv"
@@ -17,12 +20,17 @@ import (
 
 type application struct {
 	// TODO: add models
-	title         string
-	contact       *models.Contact
-	contacts      *models.ContactModel
-	email         *models.Email
-	emails        *models.EmailModel
-	templateCache map[string]*template.Template
+	title          string
+	contact        *models.Contact
+	contacts       *models.ContactModel
+	email          *models.Email
+	emails         *models.EmailModel
+	templateCache  map[string]*template.Template
+	sessionManager *scs.SessionManager
+}
+
+func (a *application) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	w.Write([]byte("This is a handler"))
 }
 
 func main() {
@@ -39,8 +47,6 @@ func main() {
 	}
 	defer db.Close()
 
-	// TODO: Add DSN when implementing SQL
-
 	err = godotenv.Load("sendgrid.env")
 	if err != nil {
 		log.Fatal("Error loading .env file")
@@ -52,10 +58,15 @@ func main() {
 		os.Exit(1)
 	}
 
+	sessionManager := scs.New()
+	sessionManager.Store = mysqlstore.New(db)
+	sessionManager.Lifetime = 3 * time.Hour
+
 	app := &application{
-		contacts:      &models.ContactModel{DB: db},
-		emails:        &models.EmailModel{DB: db},
-		templateCache: templateCache,
+		contacts:       &models.ContactModel{DB: db},
+		emails:         &models.EmailModel{DB: db},
+		templateCache:  templateCache,
+		sessionManager: sessionManager,
 	}
 
 	fmt.Print(app.templateCache)

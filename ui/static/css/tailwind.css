@@ -821,6 +821,11 @@ select {
   margin-bottom: 2rem;
 }
 
+.mx-0 {
+  margin-left: 0px;
+  margin-right: 0px;
+}
+
 .mb-16 {
   margin-bottom: 4rem;
 }
@@ -931,6 +936,14 @@ select {
 
 .h-8 {
   height: 2rem;
+}
+
+.h-\[44rem\] {
+  height: 44rem;
+}
+
+.h-\[32rem\] {
+  height: 32rem;
 }
 
 .max-h-screen {
