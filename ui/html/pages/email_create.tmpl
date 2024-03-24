@@ -1,7 +1,6 @@
 {{define "title"}}Emails{{end}}
 
 
-
 {{define "main"}}
 <!--
   This example requires some changes to your config:
@@ -17,11 +16,47 @@
   }
   ```
 -->
-<div class="relative bg-white">
-  <div class="relative mx-0 max-w-7xl ">
-    <div class="bg-white px-6 py-16 lg:col-span-3 lg:px-8 lg:py-24 xl:pl-12">
-      <div class="mx-auto max-w-lg lg:max-w-none">
-        <form action="#" method="POST" class="grid grid-cols-1 gap-y-6">
+
+<script language="JavaScript">
+  function toggle(source) {
+    checkboxes = document.getElementsByName('contacts');
+    for (var i = 0; i < checkboxes.length; i++) {
+      checkboxes[i].checked = source.checked;
+    }
+    console.log("Select All");
+  }
+</script>
+
+
+<div class="relative  bg-white">
+  <div class="relative mx-0  ">
+    <div class="bg-white px-6 py-16  lg:px-8 lg:py-24 xl:pl-12">
+      <form action="#" method="POST" class="flex gap-y-6 gap-x-4">
+        <div class="w-1/3 h-screen ">
+
+          <ul role="list" class="divide-y divide-gray-100 overflow-scroll h-2/3">
+            <li class="flex gap-x-4 px-3 py-5">
+              <div class="min-w-0 flex w-full justify-between items-center">
+                <p class="text-md font-bold leading-6 text-gray-900">Select All</p>
+                <input class="ml-4" type="checkbox" onClick="toggle(this)" />
+              </div>
+            </li>
+            {{range .Contacts}}
+            <li class="flex gap-x-4 px-3 py-5">
+              <div class="min-w-0 flex w-full justify-between items-center">
+                <div>
+                  <p class="text-sm font-semibold leading-6 text-gray-900">{{.FirstName}} {{.LastName}}</p>
+                  <p class="mt-1 truncate text-xs leading-5 text-gray-500">{{.Email}}</p>
+                </div>
+                <input id="comments" aria-describedby="comments-description" name="contacts" value="{{.Email}}"
+                  type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600">
+              </div>
+            </li>
+            {{end}}
+          </ul>
+          <!-- end list contacts -->
+        </div>
+        <div class="w-full flex flex-col gap-y-6">
           <div>
             <label for="subject" class="sr-only">Subject</label>
             <input type="text" name="subject" id="subject"
@@ -31,17 +66,16 @@
           <div>
             <label for="message" class="sr-only">Message</label>
             <textarea id="message" name="message" rows="4"
-              class="block w-full rounded-md border-gray-300 px-4 py-3 placeholder-gray-500 shadow-sm focus:border-indigo-500 focus:ring-indigo-500  h-[32rem]"
+              class="edit block w-full rounded-md border-gray-300 px-4 py-3 placeholder-gray-500 shadow-sm focus:border-indigo-500 focus:ring-indigo-500  h-[32rem]"
               placeholder="Message"></textarea>
           </div>
           <div>
             <button type="submit"
               class="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">Submit</button>
           </div>
-        </form>
-      </div>
+        </div>
+      </form>
     </div>
   </div>
 </div>
-
 {{end}}

@@ -1,3 +1,25 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+
+
+.preview {
+  background: #fff;
+  border-left: 1px solid #f3f3f3;
+  overflow: hidden;
+  padding: 0 20px;
+  margin: 20px 0;
+}
+
+.preview iframe {
+  border: none;
+  width: 100%;
+  height: max-content;
+  overflow: hidden;
+}
+
+.preview iframe::-webkit-scrollbar {
+  display: none;
+}

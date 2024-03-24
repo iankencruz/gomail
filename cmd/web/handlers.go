@@ -165,21 +165,32 @@ func (app *application) contactCreatePost(w http.ResponseWriter, r *http.Request
 
 // EMAIL Handlers
 func (app *application) emailCreate(w http.ResponseWriter, r *http.Request) {
-	emails, err := app.emails.GetAllEmails()
+	// emails, err := app.emails.GetAllEmails()
+	// if err != nil {
+	// fmt.Printf("Server Error: %s", err.Error())
+	// return
+	// }
+
+	contacts, err := app.contacts.GetAllContacts()
 	if err != nil {
 		fmt.Printf("Server Error: %s", err.Error())
 		return
 	}
-
 	data := app.newTemplateData(r)
-	data.Emails = emails
+	data.Contacts = contacts
+	// data.Emails = emails
 
 	app.render(w, r, http.StatusOK, "email_create.tmpl", data)
 
 }
 
 func (a *application) emailCreatePost(w http.ResponseWriter, r *http.Request) {
-
+	err := r.ParseForm()
+	if err != nil {
+		fmt.Printf("Server Error: %v", err.Error())
+		return
+	}
+	fmt.Printf("%+v\n", r.Form)
 }
 
 // func (app *application) contactGetAll(w http.ResponseWriter, r *http.Request) {
