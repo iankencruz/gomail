@@ -3,6 +3,7 @@ package models
 import (
 	"database/sql"
 	"fmt"
+	"net/smtp"
 	"time"
 )
 
@@ -33,8 +34,33 @@ func (e *EmailModel) Get(id int) (Email, error) {
 	return email, nil
 }
 
-func (e *EmailModel) GetAllEmails() ([]Email, error) {
+func (e *EmailModel) GetAllEmails(target []string) ([]Email, error) {
 	var emails []Email
 	fmt.Printf("Email GetAllContacts Method")
 	return emails, nil
+}
+func (e *Email) SendEmail(target []string) {
+	message := []byte("This is a test email")
+
+	// Sender Data
+	from := "ian@from.com"
+	pass := "password"
+
+	// Receiver address
+	to := target
+
+	// smtp settings
+	host := "127.0.0.1"
+	port := "1025"
+
+	// Authentication.
+	auth := smtp.PlainAuth("", from, pass, host)
+
+	// Sending email.
+	err := smtp.SendMail(host+":"+port, auth, from, to, message)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Println("Email Sent Successfully!")
 }

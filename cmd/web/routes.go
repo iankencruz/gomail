@@ -36,6 +36,7 @@ func (app *application) routes() http.Handler {
 	// Email Routes
 	r.Get("/emails/create", dynamic.ThenFunc(http.HandlerFunc(app.emailCreate)).ServeHTTP)
 	r.Post("/emails/create", dynamic.ThenFunc(http.HandlerFunc(app.emailCreatePost)).ServeHTTP)
+	r.Post("/emails/send", dynamic.ThenFunc(http.HandlerFunc(app.emailSendPost)).ServeHTTP)
 
 	return r
 }

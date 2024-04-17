@@ -16,13 +16,13 @@ import (
 // // "github.com/xuri/excelize/v2"
 )
 
-type PayrollTemplate struct {
-	Firstname      string
-	StartDate      string
-	EndDate        string
-	DeadlineDate   string
-	ProcessingDate string
-}
+// type PayrollTemplate struct {
+// 	Firstname      string
+// 	StartDate      string
+// 	EndDate        string
+// 	DeadlineDate   string
+// 	ProcessingDate string
+// }
 
 //
 // // NewEmail ...

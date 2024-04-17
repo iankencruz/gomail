@@ -183,7 +183,6 @@ func (app *application) emailCreate(w http.ResponseWriter, r *http.Request) {
 	app.render(w, r, http.StatusOK, "email_create.tmpl", data)
 
 }
-
 func (a *application) emailCreatePost(w http.ResponseWriter, r *http.Request) {
 	err := r.ParseForm()
 	if err != nil {
@@ -191,6 +190,30 @@ func (a *application) emailCreatePost(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	fmt.Printf("%+v\n", r.Form)
+}
+
+func (app *application) emailSendPost(w http.ResponseWriter, r *http.Request) {
+
+	// Get all contacts
+	contacts, err := app.contacts.GetAllContacts()
+	if err != nil {
+		fmt.Printf("Server Error: %s", err.Error())
+		return
+	}
+
+	// data := app.newPayrollTemplateData(r)
+
+	var emails []string
+
+	for _, i := range contacts {
+		emails = append(emails, i.Email)
+	}
+
+	fmt.Printf("Emails:  %v || ", emails)
+
+	// data.Contacts = contacts.First
+
+	app.email.SendEmail(emails)
 }
 
 // func (app *application) contactGetAll(w http.ResponseWriter, r *http.Request) {

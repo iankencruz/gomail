@@ -40,3 +40,7 @@ func (app *application) newTemplateData(r *http.Request) templateData {
 		CurrentYear: time.Now().Year(),
 	}
 }
+
+func (app *application) newPayrollTemplateData(r *http.Request) PayrollTemplate {
+	return PayrollTemplate{}
+}

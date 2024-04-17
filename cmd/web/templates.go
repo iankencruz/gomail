@@ -17,6 +17,15 @@ type templateData struct {
 	Form        any
 }
 
+type PayrollTemplate struct {
+	Contacts       []string
+	Firstname      string
+	StartDate      string
+	EndDate        string
+	DeadlineDate   string
+	ProcessingDate string
+}
+
 func humanDate(t time.Time) string {
 	return t.Format("02/01/2006")
 }
