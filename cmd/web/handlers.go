@@ -20,8 +20,8 @@ type contactCreateForm struct {
 	validator.Validator
 }
 
-func (app *application) home(w http.ResponseWriter, r *http.Request) {
-
+func (app *application) home(w http.ResponseWriter, r *http.Request) { // {{{}}}
+	// {{{}}}
 	contacts, err := app.contacts.GetAllContacts()
 	if err != nil {
 		fmt.Printf("Server Error: %s", err.Error())
@@ -32,7 +32,11 @@ func (app *application) home(w http.ResponseWriter, r *http.Request) {
 	data.Contacts = contacts
 
 	app.render(w, r, http.StatusOK, "home.tmpl", data)
+}
 
+func (app *application) listEmails(w http.ResponseWriter, r *http.Request) {
+	data := app.newTemplateData(r)
+	app.render(w, r, http.StatusOK, "emails.tmpl", data)
 }
 
 func (app *application) deleteContact(w http.ResponseWriter, r *http.Request) {
@@ -77,7 +81,6 @@ func (app *application) contactView(w http.ResponseWriter, r *http.Request) {
 	}
 
 	contact, err := app.contacts.Get(id)
-
 	// Check Error
 	if err != nil {
 		if errors.Is(err, models.ErrNoRecord) {
@@ -181,39 +184,49 @@ func (app *application) emailCreate(w http.ResponseWriter, r *http.Request) {
 	// data.Emails = emails
 
 	app.render(w, r, http.StatusOK, "email_create.tmpl", data)
-
 }
+
 func (a *application) emailCreatePost(w http.ResponseWriter, r *http.Request) {
 	err := r.ParseForm()
 	if err != nil {
 		fmt.Printf("Server Error: %v", err.Error())
 		return
 	}
-	fmt.Printf("%+v\n", r.Form)
+	fmt.Printf("EMAIL CREATE POST: %+v\n", r.Form)
 }
 
 func (app *application) emailSendPost(w http.ResponseWriter, r *http.Request) {
-
 	// Get all contacts
-	contacts, err := app.contacts.GetAllContacts()
+	// contacts, err := app.contacts.GetAllContacts()
+	// if err != nil {
+	// fmt.Printf("Server Error: %s", err.Error())
+	// return
+	// }
+
+	err := r.ParseForm()
 	if err != nil {
-		fmt.Printf("Server Error: %s", err.Error())
+		fmt.Printf("Server Error: %v", err.Error())
 		return
 	}
+	fmt.Printf("EMAIL CREATE POST: %+v\n", r.Form)
 
 	// data := app.newPayrollTemplateData(r)
 
-	var emails []string
+	// var emails []string
 
-	for _, i := range contacts {
-		emails = append(emails, i.Email)
-	}
+	c := r.Form["contacts"]
+	sbj := r.PostForm.Get("subject")
+	msg := r.PostForm.Get("message")
 
-	fmt.Printf("Emails:  %v || ", emails)
+	// for _, i := range r.Form {
+	// emails = append(emails, r.FormValue())
+	// }
+
+	fmt.Printf("Emails:  %s \n | Subject: %s \n | Message: %s | ", c, sbj, msg)
 
 	// data.Contacts = contacts.First
 
-	app.email.SendEmail(emails)
+	// app.email.SendEmail(c, sbj, msg)
 }
 
 // func (app *application) contactGetAll(w http.ResponseWriter, r *http.Request) {

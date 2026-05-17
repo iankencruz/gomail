@@ -34,7 +34,6 @@ func (a *application) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-
 	// Specify Web Address Port with custom flags
 	addr := flag.String("addr", ":8080", "HTTP Network Address")
 	dsn := flag.String("dsn", "root:password@/gomail?parseTime=true", "MySQL datasource name")
@@ -87,15 +86,12 @@ func main() {
 
 	// routes.InitializeRoutes()
 	// currentTime := time.Now()
-
 }
 
 func openDB(dsn string) (*sql.DB, error) {
 	db, err := sql.Open("mysql", dsn)
-
 	if err != nil {
 		return nil, err
-
 	}
 	if err = db.Ping(); err != nil {
 		return nil, err
